@@ -40,8 +40,7 @@ public class CandidateController {
 
     @DeleteMapping(value = "{id}")
     @ApiOperation(value = "Remove um candidato pelo seu Identificador")
-    @ExceptionHandler()
-    ResponseEntity<String> delete(@PathVariable Long id) {
+    ResponseEntity delete(@PathVariable Long id) {
         try {
             this.service.delete(id);
             return ResponseEntity.ok("SUCCESS");
