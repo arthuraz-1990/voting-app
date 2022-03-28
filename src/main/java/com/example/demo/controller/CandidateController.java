@@ -5,6 +5,7 @@ import com.example.demo.model.Candidate;
 import com.example.demo.service.CandidateService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,5 +36,17 @@ public class CandidateController {
         Candidate c = new Candidate(candidate.getName());
         c = this.service.save(c);
         return new CandidateDto(c);
+    }
+
+    @DeleteMapping(value = "{id}")
+    @ApiOperation(value = "Remove um candidato pelo seu Identificador")
+    @ExceptionHandler()
+    ResponseEntity<String> delete(@PathVariable Long id) {
+        try {
+            this.service.delete(id);
+            return ResponseEntity.ok("SUCCESS");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

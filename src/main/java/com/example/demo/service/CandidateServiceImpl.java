@@ -24,4 +24,13 @@ public class CandidateServiceImpl implements CandidateService {
     public Candidate save(Candidate candidate) {
         return this.repository.save(candidate);
     }
+
+    @Override
+    public void delete(long id) {
+        if (this.repository.existsById(id)) {
+            this.repository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Entity not found");
+        }
+    }
 }

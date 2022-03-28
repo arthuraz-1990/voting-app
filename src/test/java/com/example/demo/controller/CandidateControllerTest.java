@@ -7,6 +7,7 @@ import com.example.demo.service.CandidateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +40,8 @@ public class CandidateControllerTest {
     private CandidateService service;
 
     @Test
-    void findAll() throws Exception {
+    @DisplayName("Teste de listagem")
+    void test_FindAll() throws Exception {
         Candidate candidate = new Candidate();
         Mockito.when(this.service.findAll()).thenReturn(Arrays.asList(candidate, candidate));
 
@@ -50,7 +52,8 @@ public class CandidateControllerTest {
     }
 
     @Test
-    void saveCandidate() throws Exception {
+    @DisplayName("Teste para persistir candidato")
+    void test_SaveCandidate() throws Exception {
         Candidate candidate = new Candidate(NAME);
         Mockito.when(this.service.save(candidate)).thenReturn(candidate);
 
@@ -68,7 +71,8 @@ public class CandidateControllerTest {
     }
 
     @Test
-    void testValidationNameErrors() throws Exception {
+    @DisplayName("Teste para erros de validação no DTO enviado relativos ao nome")
+    void test_Save_ValidationNameErrors() throws Exception {
         // Nome vazio a principio
         CandidateDto dto = new CandidateDto();
 
@@ -97,5 +101,25 @@ public class CandidateControllerTest {
                 ).andDo(print()).
                 andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    @DisplayName("Teste para deletar a partir de um id")
+    void test_Delete() throws Exception {
+        long id = 100001L;
+
+        this.mockMvc.perform(delete(PATH.concat("/" + id))).andDo(print()).
+                andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Teste quando um id para deletar não é encontrado")
+    void test_Delete_NotFound() throws Exception {
+        long id = 100001L;
+
+        Mockito.doThrow(new IllegalArgumentException()).when(this.service).delete(id);
+
+        this.mockMvc.perform(delete(PATH.concat("/" + id))).andDo(print()).
+                andExpect(status().isNotFound());
     }
 }
