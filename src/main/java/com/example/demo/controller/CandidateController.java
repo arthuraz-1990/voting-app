@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Candidate;
 import com.example.demo.service.CandidateService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ public class CandidateController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Retorna lista de candidatos")
     List<Candidate> findAll() {
         return this.service.findAll();
     }
