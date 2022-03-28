@@ -25,7 +25,7 @@ public class CandidateController {
     @ApiOperation(value = "Retorna lista de candidatos")
     @ResponseBody
     List<CandidateDto> findAll() {
-        return this.service.findAll().stream().map(c -> new CandidateDto(c)).collect(Collectors.toList());
+        return this.service.findAll().stream().map(CandidateDto::new).collect(Collectors.toList());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
