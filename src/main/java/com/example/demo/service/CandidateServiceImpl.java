@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class CandidateServiceImpl implements CandidateService {
 
-    private CandidateRepository repository;
+    private final CandidateRepository repository;
 
     public CandidateServiceImpl(CandidateRepository repository) {
         this.repository = repository;
@@ -18,5 +18,10 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public List<Candidate> findAll() {
         return this.repository.findAll();
+    }
+
+    @Override
+    public Candidate save(Candidate candidate) {
+        return null;
     }
 }
