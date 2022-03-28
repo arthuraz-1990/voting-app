@@ -22,6 +22,6 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public Candidate save(Candidate candidate) {
-        return null;
+        return this.repository.save(candidate);
     }
 }

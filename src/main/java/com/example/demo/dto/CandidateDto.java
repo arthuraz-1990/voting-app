@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 public class CandidateDto {
 
-    private long id;
+    private Long id;
 
     @NotEmpty
     @Size(min = 3, max = 100, message = "Tamanho do Nome deve estar entre 3 e 100 caracteres")
@@ -22,11 +22,11 @@ public class CandidateDto {
         this.name = candidate.getName();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
