@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.model.Candidate;
 import com.example.demo.service.CandidateService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/candidate")
@@ -22,14 +24,16 @@ public class CandidateController {
     @GetMapping
     @ApiOperation(value = "Retorna lista de candidatos")
     @ResponseBody
-    List<Candidate> findAll() {
-        return this.service.findAll();
+    List<CandidateDto> findAll() {
+        return this.service.findAll().stream().map(c -> new CandidateDto(c)).collect(Collectors.toList());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva um novo candidato")
     @ResponseBody
-    Candidate save(@RequestBody Candidate candidate) {
-        return this.service.save(candidate);
+    CandidateDto save(@Valid @RequestBody CandidateDto candidate) {
+        Candidate c = new Candidate(candidate.getName());
+        c = this.service.save(c);
+        return new CandidateDto(c);
     }
 }
