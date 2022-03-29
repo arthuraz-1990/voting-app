@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ElectionCandidatesRegister {
 
@@ -29,5 +30,25 @@ public class ElectionCandidatesRegister {
 
     public void setCandidateList(List<Candidate> candidateList) {
         this.candidateList = candidateList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ElectionCandidatesRegister register = (ElectionCandidatesRegister) o;
+        return Objects.equals(electionId, register.electionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(electionId);
+    }
+
+    @Override
+    public String toString() {
+        return "ElectionCandidatesRegister{" +
+                "electionId=" + electionId +
+                '}';
     }
 }

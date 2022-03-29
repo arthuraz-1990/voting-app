@@ -98,7 +98,7 @@ public class ElectionCandidatesRegisterControllerTest {
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andExpect(jsonPath("$").isNotEmpty()).
                 andExpect(jsonPath("$.candidateList").isArray()).
-                andExpect(jsonPath("$.candidateList[0]").value(candidateName));
+                andExpect(jsonPath("$.candidateList[0].name").value(candidateName));
     }
 
 

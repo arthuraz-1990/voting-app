@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ElectionCandidatesRegisterDto;
+import com.example.demo.model.Candidate;
 import com.example.demo.model.ElectionCandidatesRegister;
 import com.example.demo.service.CandidateElectionService;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +39,8 @@ public class ElectionCandidatesRegisterController {
     @PostMapping(value = "election/{electionId}")
     @ApiOperation("Registrar um Candidato para uma eleição")
     ElectionCandidatesRegisterDto registerCandidate(@PathVariable Long electionId, @RequestBody CandidateDto candidateDto) {
-        ElectionCandidatesRegister register = this.service.findByElectionId(electionId);
+        Candidate candidate = new ModelMapper().map(candidateDto, Candidate.class);
+        ElectionCandidatesRegister register = this.service.save(electionId, candidate);
         if (register != null) {
             return this.mapper.map(register, ElectionCandidatesRegisterDto.class);
         }
