@@ -14,13 +14,6 @@ public class CandidateDto {
     @Size(min = 3, max = 100, message = "Tamanho do Nome deve estar entre 3 e 100 caracteres")
     private String name;
 
-    public CandidateDto() {
-    }
-
-    public CandidateDto(Candidate candidate) {
-        this.id = candidate.getId();
-        this.name = candidate.getName();
-    }
 
     public Long getId() {
         return id;

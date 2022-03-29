@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,6 +40,9 @@ public class CandidateControllerTest {
     @MockBean
     private CandidateService service;
 
+    @MockBean
+    private ModelMapper modelMapper;
+
     @Test
     @DisplayName("Teste de listagem")
     void test_FindAll() throws Exception {
@@ -59,7 +63,7 @@ public class CandidateControllerTest {
 
         // Transformando o objeto para uma string json
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String jsonContent = objectWriter.writeValueAsString(new CandidateDto(candidate));
+        String jsonContent = objectWriter.writeValueAsString(new ModelMapper().map(candidate, CandidateDto.class));
 
         this.mockMvc.perform(
                     post(PATH).contentType(MediaType.APPLICATION_JSON).content(jsonContent)
@@ -96,6 +100,7 @@ public class CandidateControllerTest {
 
         // Gerando string com valor maior do que o permitido para o nome
         String bigName = RandomStringUtils.randomAlphanumeric(101);
+        dto.setName(bigName);
         this.mockMvc.perform(
                         post(PATH).contentType(MediaType.APPLICATION_JSON).content(jsonContent)
                 ).andDo(print()).
@@ -109,6 +114,7 @@ public class CandidateControllerTest {
         long id = 100001L;
 
         this.mockMvc.perform(delete(PATH.concat("/" + id))).andDo(print()).
+                andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN)).
                 andExpect(status().isOk());
     }
 
