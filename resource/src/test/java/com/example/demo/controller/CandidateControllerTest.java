@@ -40,9 +40,6 @@ public class CandidateControllerTest {
     @MockBean
     private CandidateService service;
 
-    @MockBean
-    private ModelMapper modelMapper;
-
     @Test
     @DisplayName("Teste de listagem")
     void test_FindAll() throws Exception {
