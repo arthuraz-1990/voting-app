@@ -35,7 +35,7 @@ public class ElectionCandidatesRegisterServiceTest {
     @BeforeEach
     void setup() {
         this.service = new ElectionCandidatesRegisterServiceImpl(registerRepository, candidateRepository);
-        String candidateName = "Candidato Atual";
+        String candidateName = "Existing Candidate";
         Candidate candidate = new Candidate(candidateName);
         candidate.setId(CANDIDATE_ID_DEFAULT);
 
