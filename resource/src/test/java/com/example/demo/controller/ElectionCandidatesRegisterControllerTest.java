@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Candidate;
 import com.example.demo.model.ElectionCandidatesRegister;
-import com.example.demo.service.CandidateElectionService;
+import com.example.demo.service.ElectionCandidatesRegisterService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ElectionCandidatesRegisterControllerTest {
 
     @MockBean
-    private CandidateElectionService service;
+    private ElectionCandidatesRegisterService service;
 
     @Autowired
     private MockMvc mockMvc;

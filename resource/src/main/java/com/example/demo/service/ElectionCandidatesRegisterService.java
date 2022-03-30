@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Candidate;
 import com.example.demo.model.ElectionCandidatesRegister;
 
-public interface CandidateElectionService {
+public interface ElectionCandidatesRegisterService {
 
     ElectionCandidatesRegister findByElectionId(long electionId);
 

@@ -4,7 +4,7 @@ import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ElectionCandidatesRegisterDto;
 import com.example.demo.model.Candidate;
 import com.example.demo.model.ElectionCandidatesRegister;
-import com.example.demo.service.CandidateElectionService;
+import com.example.demo.service.ElectionCandidatesRegisterService;
 import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -12,17 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping(value = "candidates-register")
 public class ElectionCandidatesRegisterController {
 
-    private final CandidateElectionService service;
+    private final ElectionCandidatesRegisterService service;
     private final ModelMapper mapper;
 
-    public ElectionCandidatesRegisterController(CandidateElectionService service) {
+    public ElectionCandidatesRegisterController(ElectionCandidatesRegisterService service) {
         this.service = service;
         this.mapper = new ModelMapper();
     }
