@@ -25,7 +25,21 @@ public class ElectionCandidatesRegisterServiceImpl implements ElectionCandidates
 
     @Override
     public ElectionCandidatesRegister save(long electionId, Candidate candidate) {
-        return null;
+        if (candidate == null) {
+            throw new IllegalArgumentException("Candidato não enviado.");
+        }
+
+        ElectionCandidatesRegister election = this.registerRepository.findById(electionId).
+                orElseThrow(() -> new IllegalArgumentException("Eleição não encontrada"));
+
+        // Verificando se um candidato com o mesmo id foi adicionado anteriormente
+        if (!election.getCandidateList().isEmpty() && election.getCandidateList().contains(candidate)) {
+            throw new IllegalArgumentException("Candidato já registrado anteriormente");
+        }
+
+        election.getCandidateList().add(candidate);
+
+        return this.registerRepository.save(election);
     }
 
     @Override

@@ -12,7 +12,7 @@ public class ElectionCandidatesRegister implements Serializable {
     @Id
     private Long electionId;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Candidate> candidateList;
 
     public ElectionCandidatesRegister() {

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,15 +30,19 @@ public class ElectionCandidatesRegisterServiceTest {
     private ElectionCandidatesRegister mockRegister;
 
     private static final long ELECTION_ID_DEFAULT = 2001L;
+    private static final long CANDIDATE_ID_DEFAULT = 1001L;
 
     @BeforeEach
     void setup() {
         this.service = new ElectionCandidatesRegisterServiceImpl(registerRepository, candidateRepository);
         String candidateName = "Candidato Atual";
         Candidate candidate = new Candidate(candidateName);
+        candidate.setId(CANDIDATE_ID_DEFAULT);
 
         ElectionCandidatesRegister register = new ElectionCandidatesRegister(ELECTION_ID_DEFAULT);
-        register.setCandidateList(List.of(candidate));
+        List<Candidate> candidateList = new ArrayList<>();
+        candidateList.add(candidate);
+        register.setCandidateList(candidateList);
 
         this.mockRegister = register;
     }
@@ -65,6 +70,57 @@ public class ElectionCandidatesRegisterServiceTest {
 
         Assertions.assertNull(register);
 
+    }
+    
+    @Test
+    @DisplayName("Teste para adicionar candidato")
+    void test_AddNewCandidateToElection() {
+        Candidate newCandidate = createNewCandidate();
+
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT)).thenReturn(Optional.of(this.mockRegister));
+        Mockito.when(this.registerRepository.save(this.mockRegister)).thenReturn(this.mockRegister);
+
+        ElectionCandidatesRegister register = this.service.save(ELECTION_ID_DEFAULT, newCandidate);
+        Assertions.assertNotNull(register);
+        Assertions.assertFalse(register.getCandidateList().isEmpty());
+        Assertions.assertEquals(register.getCandidateList().size(), 2);
+        Assertions.assertTrue(register.getCandidateList().stream().anyMatch(c -> c.getName().equals(newCandidate.getName())));
+    }
+
+    @Test
+    @DisplayName("Erro ao adicionar candidato que já existe")
+    void test_Error_AddExistingCandidateToElection() {
+        Candidate newCandidate = createNewCandidate();
+        // Deixando com o mesmo id que já existe
+        newCandidate.setId(CANDIDATE_ID_DEFAULT);
+
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT)).thenReturn(Optional.of(this.mockRegister));
+        Mockito.when(this.registerRepository.save(this.mockRegister)).thenReturn(this.mockRegister);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(ELECTION_ID_DEFAULT, newCandidate));
+    }
+
+    @Test
+    @DisplayName("Erro ao adicionar à eleição com id não encontrado")
+    void test_Error_ElectionNotFoundAddNewCandidate() {
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT + 1)).thenReturn(Optional.empty());
+        Mockito.when(this.registerRepository.save(this.mockRegister)).thenReturn(this.mockRegister);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(ELECTION_ID_DEFAULT, createNewCandidate()));
+    }
+
+    @Test
+    @DisplayName("Erro ao adicionar sem candidato")
+    void test_Error_AddNoCandidate() {
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT)).thenReturn(Optional.of(this.mockRegister));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(ELECTION_ID_DEFAULT, null));
+    }
+
+    private Candidate createNewCandidate() {
+        Candidate newCandidate = new Candidate();
+        newCandidate.setId(CANDIDATE_ID_DEFAULT + 1);
+        newCandidate.setName("New Candidate");
+        return newCandidate;
     }
 
 
