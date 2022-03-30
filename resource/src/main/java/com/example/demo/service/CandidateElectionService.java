@@ -8,4 +8,6 @@ public interface CandidateElectionService {
     ElectionCandidatesRegister findByElectionId(long electionId);
 
     ElectionCandidatesRegister save(long electionId, Candidate candidate);
+
+    void delete(long electionId, long candidateId);
 }

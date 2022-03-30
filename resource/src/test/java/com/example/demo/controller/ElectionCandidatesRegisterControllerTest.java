@@ -12,9 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,7 +37,6 @@ public class ElectionCandidatesRegisterControllerTest {
 
     private static final String PATH = "/candidates-register";
     private static final String ELECTION_PATH = PATH.concat("/election");
-
 
     @Test
     @DisplayName("Buscar lista pelo identificador da Eleição")
@@ -80,7 +77,7 @@ public class ElectionCandidatesRegisterControllerTest {
         long electionId = 2002L;
         String candidateName = "New Candidate";
 
-        Candidate candidate = new Candidate("New Candidate");
+        Candidate candidate = new Candidate(candidateName);
         String jsonContent = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(candidate);
 
         ElectionCandidatesRegister register = new ElectionCandidatesRegister(electionId);
@@ -99,6 +96,62 @@ public class ElectionCandidatesRegisterControllerTest {
                 andExpect(jsonPath("$").isNotEmpty()).
                 andExpect(jsonPath("$.candidateList").isArray()).
                 andExpect(jsonPath("$.candidateList[0].name").value(candidateName));
+    }
+
+    private
+
+    @Test
+    @DisplayName("Erro ao Adicionar novo candidato - Sem candidato")
+    void test_ErrorNoCandidate() throws Exception {
+        long electionId = 2002L;
+
+        this.mockMvc.perform(post(ELECTION_PATH + "/" + electionId)).
+                andDo(print()).
+                andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Erro ao Adicionar novo candidato - candidato que já existe")
+    void test_ErrorCandidateExists() throws Exception {
+        long electionId = 2002L;
+
+        String candidateName = "Old Candidate";
+
+        Candidate candidate = new Candidate(candidateName);
+        String jsonContent = objectMapper.writer().withDefaultPrettyPrinter().writeValueAsString(candidate);
+
+        Mockito.doThrow(new IllegalArgumentException()).when(this.service).save(electionId, candidate);
+
+        this.mockMvc.perform(post(ELECTION_PATH + "/" + electionId).
+                        contentType(MediaType.APPLICATION_JSON).content(jsonContent)).
+                andDo(print()).
+                andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Remover candidato registrado em uma eleição")
+    void test_RemoveCandidateExists() throws Exception {
+        long electionId = 2002L;
+        long candidateId = 1002L;
+
+        this.mockMvc.perform(delete(ELECTION_PATH + "/" + electionId + "/candidate/" + candidateId)).
+                andDo(print()).
+                andExpect(status().isOk()).
+                andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN)).
+                andExpect(content().string("SUCCESS"));
+    }
+
+    @Test
+    @DisplayName("Erro Remover candidato NÃO registrado em uma eleição")
+    void test_ErrorRemoveCandidateNotExists() throws Exception {
+        long electionId = 2002L;
+        long candidateId = 1002L;
+
+        Mockito.doThrow(new IllegalArgumentException()).when(this.service).delete(electionId, candidateId);
+
+        this.mockMvc.perform(delete(ELECTION_PATH + "/" + electionId + "/candidate/" + candidateId)).
+                andDo(print()).
+                andExpect(status().isNotFound());
     }
 
 
