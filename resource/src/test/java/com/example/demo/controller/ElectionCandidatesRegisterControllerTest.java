@@ -142,7 +142,7 @@ public class ElectionCandidatesRegisterControllerTest {
     }
 
     @Test
-    @DisplayName("Erro Remover candidato NÃO registrado em uma eleição")
+    @DisplayName("Erro Remover candidato NÃO registrado em uma eleição ou eleição não existente")
     void test_ErrorRemoveCandidateNotExists() throws Exception {
         long electionId = 2002L;
         long candidateId = 1002L;

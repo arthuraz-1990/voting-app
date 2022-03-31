@@ -6,6 +6,8 @@ import com.example.demo.repository.CandidateRepository;
 import com.example.demo.repository.ElectionCandidatesRegisterRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ElectionCandidatesRegisterServiceImpl implements ElectionCandidatesRegisterService {
 
@@ -44,6 +46,15 @@ public class ElectionCandidatesRegisterServiceImpl implements ElectionCandidates
 
     @Override
     public void delete(long electionId, long candidateId) {
+        ElectionCandidatesRegister election = this.registerRepository.findById(electionId).
+                orElseThrow(() -> new IllegalArgumentException("Eleição não encontrada"));
+        //
+        Optional<Candidate> candidate = election.getCandidateList().stream().filter(c -> c.getId().equals(candidateId)).findAny();
+        if (candidate.isEmpty()) {
+            throw new IllegalArgumentException("Candidato não está associado à esta eleição");
+        }
 
+        election.getCandidateList().remove(candidate.get());
+        this.registerRepository.save(election);
     }
 }

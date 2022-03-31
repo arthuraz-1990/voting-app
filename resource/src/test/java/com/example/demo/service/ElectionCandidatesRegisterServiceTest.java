@@ -116,6 +116,30 @@ public class ElectionCandidatesRegisterServiceTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(ELECTION_ID_DEFAULT, null));
     }
 
+    @Test
+    @DisplayName("Remover Candidato de uma eleição")
+    void test_RemoveCandidate() {
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT)).thenReturn(Optional.of(this.mockRegister));
+        Mockito.when(this.registerRepository.save(this.mockRegister)).thenReturn(this.mockRegister);
+        this.service.delete(ELECTION_ID_DEFAULT, CANDIDATE_ID_DEFAULT);
+
+        Assertions.assertFalse(mockRegister.getCandidateList().stream().anyMatch(c -> c.getId().equals(CANDIDATE_ID_DEFAULT)));
+        Assertions.assertTrue(mockRegister.getCandidateList().isEmpty());
+    }
+    @Test
+    @DisplayName("Erro ao remover candidato não registrado na eleição")
+    void test_ErrorRemoveCandidateNotRegistered() {
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT)).thenReturn(Optional.of(this.mockRegister));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.delete(ELECTION_ID_DEFAULT, CANDIDATE_ID_DEFAULT + 1));
+    }
+
+    @Test
+    @DisplayName("Erro ao remover candidato de uma eleição não encontrada")
+    void test_ErrorRemoveCandidateElectionNotFound() {
+        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT + 1)).thenReturn(Optional.empty());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.delete(ELECTION_ID_DEFAULT + 1, CANDIDATE_ID_DEFAULT));
+    }
+
     private Candidate createNewCandidate() {
         Candidate newCandidate = new Candidate();
         newCandidate.setId(CANDIDATE_ID_DEFAULT + 1);
