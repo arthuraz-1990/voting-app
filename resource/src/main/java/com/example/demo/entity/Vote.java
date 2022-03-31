@@ -1,17 +1,40 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.Candidate;
+import com.example.demo.model.Election;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Vote {
+@Entity
+@Table
+public class Vote implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private Long electionId;
+    @Column(nullable = false)
     private Long candidateId;
+    @Column(nullable = false)
     private Long userId;
+    @Version
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime voteTime;
+
+    @ManyToOne
+    @JoinColumn(name = "electionId", insertable = false, updatable = false)
+    private Election election;
+
+    @ManyToOne
+    @JoinColumn(name = "candidateId", insertable = false, updatable = false)
+    private Candidate candidate;
+
+    // TODO: 31/03/2022 Adicionar relacionamento com tabela de usuários
 
     public Long getId() {
         return id;
@@ -51,6 +74,14 @@ public class Vote {
 
     public void setVoteTime(LocalDateTime voteTime) {
         this.voteTime = voteTime;
+    }
+
+    public Candidate getCandidate() {
+        return candidate;
+    }
+
+    public Election getElection() {
+        return election;
     }
 
     @Override
