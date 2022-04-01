@@ -32,7 +32,7 @@ public class VoteServiceTest {
 
     private static final long ELECTION_ID_DEFAULT = 2001L;
     private static final long CANDIDATE_ID_DEFAULT = 1001L;
-    private static final long USER_ID_DEFAULT = 3001L;
+    private static final String USER_ID_DEFAULT = "tester@test.com";
 
     @BeforeEach
     void setup() {

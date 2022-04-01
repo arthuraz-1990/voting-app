@@ -57,7 +57,7 @@ public class ElectionCandidatesRegisterServiceTest {
         Assertions.assertNotNull(register);
         Assertions.assertFalse(register.getCandidateList().isEmpty());
         Assertions.assertEquals(register.getElectionId(), ELECTION_ID_DEFAULT);
-        Assertions.assertTrue(register.getCandidateList().get(0).getName().contains("Atual"));
+        Assertions.assertTrue(register.getCandidateList().get(0).getName().contains("Existing"));
 
     }
 

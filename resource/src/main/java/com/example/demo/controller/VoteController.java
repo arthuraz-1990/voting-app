@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.VoteDTO;
 import com.example.demo.entity.Vote;
 import com.example.demo.service.VoteService;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
@@ -26,12 +27,14 @@ public class VoteController {
     }
 
     @GetMapping(value = "election/{electionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation("Busca de votos por Identificador da Eleição")
     public List<VoteDTO> findByElectionId(@PathVariable Long electionId) {
         return this.service.findByElectionId(electionId).stream().map(v -> this.modelMapper.map(v, VoteDTO.class)).
                 collect(Collectors.toList());
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation("Enviar um voto")
     public VoteDTO sendVote(@Valid @RequestBody VoteDTO voteDTO) {
         Vote vote = this.modelMapper.map(voteDTO, Vote.class);
         vote = this.service.save(vote);

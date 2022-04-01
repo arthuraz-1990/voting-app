@@ -21,7 +21,7 @@ public class Vote implements Serializable {
     @Column(nullable = false)
     private Long candidateId;
     @Column(nullable = false)
-    private Long userId;
+    private String userId;
     @Version
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime voteTime;
@@ -60,11 +60,11 @@ public class Vote implements Serializable {
         this.candidateId = candidateId;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

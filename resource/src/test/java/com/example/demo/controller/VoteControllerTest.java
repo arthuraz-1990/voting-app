@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
@@ -38,7 +40,7 @@ public class VoteControllerTest {
 
     private static final long ELECTION_ID_DEFAULT = 2001L;
     private static final long CANDIDATE_ID_DEFAULT = 1001L;
-    private static final long USER_ID_DEFAULT = 3001L;
+    private static final String USER_ID_DEFAULT = "tester@test.com";
 
     @Test
     @DisplayName("Buscar todos os votos registrados por eleição")
@@ -103,6 +105,8 @@ public class VoteControllerTest {
         vote.setCandidateId(CANDIDATE_ID_DEFAULT);
         vote.setUserId(null);
 
+        jsonContent = this.objectMapper.writeValueAsString(vote);
+
         this.mockMvc.perform(MockMvcRequestBuilders.post(PATH).
                         content(jsonContent).contentType(MediaType.APPLICATION_JSON)).
                 andDo(MockMvcResultHandlers.print()).
@@ -112,18 +116,47 @@ public class VoteControllerTest {
         vote.setUserId(USER_ID_DEFAULT);
         vote.setElectionId(null);
 
+        jsonContent = this.objectMapper.writeValueAsString(vote);
+
         this.mockMvc.perform(MockMvcRequestBuilders.post(PATH).
                         content(jsonContent).contentType(MediaType.APPLICATION_JSON)).
                 andDo(MockMvcResultHandlers.print()).
                 andExpect(MockMvcResultMatchers.status().isBadRequest()).
                 andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
+    }
 
+    @Test
+    @DisplayName("Erro com requisição sem o body")
+    void test_ErrorNoRequestBody() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.post(PATH)).
+                andDo(MockMvcResultHandlers.print()).
+                andExpect(MockMvcResultMatchers.status().isUnsupportedMediaType()).
+                andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof HttpMediaTypeNotSupportedException));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH).
+                        content("").contentType(MediaType.APPLICATION_JSON)).
+                andDo(MockMvcResultHandlers.print()).
+                andExpect(MockMvcResultMatchers.status().isBadRequest()).
+                andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException));
+    }
+
+    @Test
+    @DisplayName("Erro com userId com formato inválido de email")
+    void test_InvalidUserIdEmail() throws Exception {
+        Vote vote = this.createVote();
+        vote.setUserId("abc");
+
+        String jsonContent = this.objectMapper.writeValueAsString(vote);
+
+        Mockito.when(this.service.save(vote)).thenReturn(vote);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post(PATH).
+                        content(jsonContent).contentType(MediaType.APPLICATION_JSON)).
                 andDo(MockMvcResultHandlers.print()).
                 andExpect(MockMvcResultMatchers.status().isBadRequest()).
                 andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
-
     }
+
 
     private Vote createVote() {
         Vote vote = new Vote();

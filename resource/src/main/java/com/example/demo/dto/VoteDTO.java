@@ -2,6 +2,8 @@ package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -11,8 +13,9 @@ public class VoteDTO {
     private Long electionId;
     @NotNull
     private Long candidateId;
-    @NotNull
-    private Long userId;
+    @NotBlank
+    @Email
+    private String userId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime voteTime;
 
@@ -32,11 +35,11 @@ public class VoteDTO {
         this.candidateId = candidateId;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
