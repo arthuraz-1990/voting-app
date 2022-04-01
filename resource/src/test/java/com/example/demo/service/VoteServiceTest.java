@@ -95,12 +95,22 @@ public class VoteServiceTest {
     }
 
     // TODO: Implementar testes para quando os relacionamentos não forem encontrados.
-    @Disabled("Implementar buscas pelos relacionamentos ao salvar pendente")
     @Test
     @DisplayName("Erro ao salvar voto, eleição não encontrada")
     void test_errorNotFoundElection() {
         Vote vote = this.createVote();
+        // Forçando um id diferente para ele não ser encontrado no mock
         vote.setElectionId(ELECTION_ID_DEFAULT + 1);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(vote));
+    }
+
+    @Test
+    @DisplayName("Erro ao salvar voto, candidato não encontrada")
+    void test_errorNotFoundCandidate() {
+        Vote vote = this.createVote();
+        // Forçando um id diferente para ele não ser encontrado no mock
+        vote.setCandidateId(CANDIDATE_ID_DEFAULT + 1);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(vote));
     }

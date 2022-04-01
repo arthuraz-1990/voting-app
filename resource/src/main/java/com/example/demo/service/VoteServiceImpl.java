@@ -31,6 +31,13 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Vote save(Vote vote) {
+        if (!this.electionRepository.existsById(vote.getElectionId())) {
+            throw new IllegalArgumentException("Eleição não encontrada.");
+        }
+        if (!this.candidateRepository.existsById(vote.getCandidateId())) {
+            throw new IllegalArgumentException("Candidato não encontrado.");
+        }
+
         return this.voteRepository.save(vote);
     }
 }
