@@ -94,7 +94,6 @@ public class VoteServiceTest {
         Assertions.assertEquals(createdVote.getUserId(), USER_ID_DEFAULT);
     }
 
-    // TODO: Implementar testes para quando os relacionamentos não forem encontrados.
     @Test
     @DisplayName("Erro ao salvar voto, eleição não encontrada")
     void test_errorNotFoundElection() {
@@ -114,5 +113,7 @@ public class VoteServiceTest {
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(vote));
     }
+
+    // TODO: Implementar testes para o relacionamento de User.
 
 }
