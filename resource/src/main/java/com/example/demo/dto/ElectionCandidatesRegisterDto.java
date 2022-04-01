@@ -1,12 +1,16 @@
 package com.example.demo.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 import java.util.Objects;
 
 public class ElectionCandidatesRegisterDto {
 
+    @ApiModelProperty("Identificador da Eleição")
     private Long electionId;
 
+    @ApiModelProperty("Listagem de Candidatos registrados")
     private List<CandidateDto> candidateList;
 
     public Long getElectionId() {

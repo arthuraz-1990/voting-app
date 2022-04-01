@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.ElectionDto;
 import com.example.demo.model.Election;
 import com.example.demo.service.ElectionService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api("Controller de Eleições")
 @RestController
 @RequestMapping(value = "/election")
 public class ElectionController {
@@ -33,7 +34,12 @@ public class ElectionController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva uma nova Eleição")
-    ElectionDto save(@Valid @RequestBody ElectionDto electionDto) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Eleição salva"),
+            @ApiResponse(code = 400, message = "Erro ao salvar eleição")
+    })
+    ElectionDto save(
+            @Valid @RequestBody @ApiParam("Descrição da Eleição") ElectionDto electionDto) {
         Election c = this.modelMapper.map(electionDto, Election.class);
         c = this.service.save(c);
         return this.modelMapper.map(c, ElectionDto.class);
@@ -41,7 +47,12 @@ public class ElectionController {
 
     @DeleteMapping(value = "{id}")
     @ApiOperation(value = "Remove uma Eleição pelo seu Identificador")
-    ResponseEntity<String> delete(@PathVariable Long id) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Eleição removida"),
+            @ApiResponse(code = 404, message = "Eleição não encontrada"),
+    })
+    ResponseEntity<String> delete(
+            @PathVariable @ApiParam("Identificador da Eleição") Long id) {
         try {
             this.service.delete(id);
             return ResponseEntity.ok("SUCCESS");

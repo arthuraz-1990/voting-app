@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.model.Candidate;
 import com.example.demo.service.CandidateService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Api("Controller de Candidatos")
 @RestController
 @RequestMapping(value = "/candidate")
 public class CandidateController {
@@ -27,6 +28,11 @@ public class CandidateController {
 
     @GetMapping
     @ApiOperation(value = "Retorna lista de candidatos")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna a lista de candidatos"),
+            @ApiResponse(code = 400, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+    })
     @ResponseBody
     List<CandidateDto> findAll() {
         return this.service.findAll().stream().map(c -> this.modelMapper.map(c, CandidateDto.class)).collect(Collectors.toList());
@@ -35,7 +41,12 @@ public class CandidateController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva um novo candidato")
     @ResponseBody
-    CandidateDto save(@Valid @RequestBody CandidateDto candidate) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Novo candidato salvo"),
+            @ApiResponse(code = 400, message = "Erro ao salvar candidato")
+    })
+    CandidateDto save(
+            @Valid @RequestBody @ApiParam("Descrição do Candidato") CandidateDto candidate) {
         Candidate c = this.modelMapper.map(candidate, Candidate.class);
         c = this.service.save(c);
         return this.modelMapper.map(c, CandidateDto.class);
@@ -43,7 +54,12 @@ public class CandidateController {
 
     @DeleteMapping(value = "{id}")
     @ApiOperation(value = "Remove um candidato pelo seu Identificador")
-    ResponseEntity<String> delete(@PathVariable Long id) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Candidato removido"),
+            @ApiResponse(code = 404, message = "Candidato não encontrado"),
+    })
+    ResponseEntity<String> delete(
+            @PathVariable @ApiParam("Identificador do Candidato") Long id) {
         try {
             this.service.delete(id);
             return ResponseEntity.ok("SUCCESS");
