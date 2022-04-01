@@ -3,7 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.dto.VoteDTO;
 import com.example.demo.entity.Vote;
 import com.example.demo.service.VoteService;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
@@ -13,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api("Controller de Votos")
+@Tag(description = "Controller com os serviços de Votos", name = "Controller de Votos")
 @RestController
 @RequestMapping(value = "vote")
 public class VoteController {
@@ -28,24 +32,24 @@ public class VoteController {
     }
 
     @GetMapping(value = "election/{electionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation("Busca de votos por Identificador da Eleição")
+    @Operation(summary = "Busca de votos por Identificador da Eleição")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Listagem de votos por eleição")
+            @ApiResponse(responseCode = "200", description = "Listagem de votos por eleição")
     })
     public List<VoteDTO> findByElectionId(
-            @PathVariable @ApiParam("Identificador da Eleição") Long electionId) {
+            @PathVariable @Parameter(description ="Identificador da Eleição") Long electionId) {
         return this.service.findByElectionId(electionId).stream().map(v -> this.modelMapper.map(v, VoteDTO.class)).
                 collect(Collectors.toList());
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation("Enviar um voto")
+    @Operation(summary = "Enviar um voto")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Voto registrado"),
-            @ApiResponse(code = 400, message = "Erro ao registrar voto")
+            @ApiResponse(responseCode = "200", description = "Voto registrado"),
+            @ApiResponse(responseCode = "400", description = "Erro ao registrar voto")
     })
     public VoteDTO sendVote(
-            @Valid @RequestBody @ApiParam("Descrição do Voto") VoteDTO voteDTO) {
+            @Valid @RequestBody @Parameter(description = "Descrição do Voto") VoteDTO voteDTO) {
         Vote vote = this.modelMapper.map(voteDTO, Vote.class);
         vote = this.service.save(vote);
         return this.modelMapper.map(vote, VoteDTO.class);

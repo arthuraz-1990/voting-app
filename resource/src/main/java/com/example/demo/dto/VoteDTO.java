@@ -1,7 +1,7 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,17 +10,17 @@ import java.time.LocalDateTime;
 
 public class VoteDTO {
 
-    @ApiModelProperty("Identificador da Eleição")
+    @Schema(description = "Identificador da Eleição")
     @NotNull
     private Long electionId;
-    @ApiModelProperty("Identificador do Candidato")
+    @Schema(description = "Identificador do Candidato")
     @NotNull
     private Long candidateId;
-    @ApiModelProperty("Identificador do Usuário (email)")
+    @Schema(description = "Identificador do Usuário (email)")
     @NotBlank
     @Email
     private String userId;
-    @ApiModelProperty("Data/Hora do Voto")
+    @Schema(description = "Data/Hora do Voto", format = "yyyy-MM-dd HH:mm:ss", type = "string")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime voteTime;
 

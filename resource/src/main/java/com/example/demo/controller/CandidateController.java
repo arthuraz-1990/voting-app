@@ -3,7 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.model.Candidate;
 import com.example.demo.service.CandidateService;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api("Controller de Candidatos")
+@Tag(description = "Controller com os serviços de Candidatos", name = "Controller de Candidatos")
 @RestController
 @RequestMapping(value = "/candidate")
 public class CandidateController {
@@ -27,11 +31,11 @@ public class CandidateController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Retorna lista de candidatos")
+    @Operation(summary = "Retorna lista de candidatos")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retorna a lista de candidatos"),
-            @ApiResponse(code = 400, message = "Você não tem permissão para acessar este recurso"),
-            @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+            @ApiResponse(responseCode = "200", description = "Retorna a lista de candidatos"),
+            @ApiResponse(responseCode = "400", description = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção"),
     })
     @ResponseBody
     List<CandidateDto> findAll() {
@@ -39,27 +43,27 @@ public class CandidateController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Salva um novo candidato")
+    @Operation(summary = "Salva um novo candidato")
     @ResponseBody
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Novo candidato salvo"),
-            @ApiResponse(code = 400, message = "Erro ao salvar candidato")
+            @ApiResponse(responseCode = "200", description = "Novo candidato salvo"),
+            @ApiResponse(responseCode = "400", description = "Erro ao salvar candidato")
     })
     CandidateDto save(
-            @Valid @RequestBody @ApiParam("Descrição do Candidato") CandidateDto candidate) {
+            @Valid @RequestBody @Parameter(description = "Descrição do Candidato") CandidateDto candidate) {
         Candidate c = this.modelMapper.map(candidate, Candidate.class);
         c = this.service.save(c);
         return this.modelMapper.map(c, CandidateDto.class);
     }
 
     @DeleteMapping(value = "{id}")
-    @ApiOperation(value = "Remove um candidato pelo seu Identificador")
+    @Operation(summary = "Remove um candidato pelo seu Identificador")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Candidato removido"),
-            @ApiResponse(code = 404, message = "Candidato não encontrado"),
+            @ApiResponse(responseCode = "200", description = "Candidato removido"),
+            @ApiResponse(responseCode = "404", description = "Candidato não encontrado"),
     })
     ResponseEntity<String> delete(
-            @PathVariable @ApiParam("Identificador do Candidato") Long id) {
+            @PathVariable @Parameter(description = "Identificador do Candidato") Long id) {
         try {
             this.service.delete(id);
             return ResponseEntity.ok("SUCCESS");
