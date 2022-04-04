@@ -39,7 +39,7 @@ public class ElectionResultControllerTest {
     void setup() {
         this.electionResult = new ElectionResultDto();
         this.electionResult.setElectionId(ELECTION_ID);
-        this.electionResult.setCandidatePartialList(List.of());
+        this.electionResult.setCandidateResultList(List.of());
 
         Mockito.when(this.service.findById(Mockito.anyLong())).thenAnswer(
                 invocationOnMock -> {
