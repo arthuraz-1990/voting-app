@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ElectionResultDto {
@@ -8,6 +9,9 @@ public class ElectionResultDto {
 
     private List candidatePartialList;
 
+    public ElectionResultDto() {
+        this.candidatePartialList = new ArrayList();
+    }
 
     public long getElectionId() {
         return electionId;
@@ -23,5 +27,9 @@ public class ElectionResultDto {
 
     public void setCandidatePartialList(List candidatePartialList) {
         this.candidatePartialList = candidatePartialList;
+    }
+
+    public long getTotalVotes() {
+        return 0;
     }
 }
