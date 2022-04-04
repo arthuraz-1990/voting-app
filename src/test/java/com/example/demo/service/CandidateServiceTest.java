@@ -21,10 +21,13 @@ public class CandidateServiceTest {
     @Mock
     private CandidateRepository repository;
 
+    private static final String NAME = "New Candidate";
+    private static final String IMG_URL = "http://teste.com/img.png";
+
     @Test
     @DisplayName("Teste de listagem de candidatos")
     void test_FindAll() {
-        Candidate c = new Candidate();
+        Candidate c = this.createCandidate();
         Mockito.when(this.repository.findAll()).thenReturn(Arrays.asList(c, c));
         List<Candidate> candidateList = this.createService().findAll();
 
@@ -35,11 +38,13 @@ public class CandidateServiceTest {
     @Test
     @DisplayName("Teste para Persistência de um candidato")
     void test_Save() {
-        Candidate c = new Candidate();
+        Candidate c = this.createCandidate();
         Mockito.when(this.repository.save(c)).thenReturn(c);
 
         c = this.createService().save(c);
-        assertNotEquals(c, null);
+        assertNotNull(c);
+        assertEquals(c.getName(), NAME);
+        assertEquals(c.getImgUrl(), IMG_URL);
     }
 
     @Test
@@ -58,6 +63,13 @@ public class CandidateServiceTest {
         Mockito.when(this.repository.existsById(id)).thenReturn(Boolean.FALSE);
 
         assertThrows(IllegalArgumentException.class, () -> this.createService().delete(id));
+    }
+
+    private Candidate createCandidate() {
+        Candidate c = new Candidate();
+        c.setName(NAME);
+        c.setImgUrl(IMG_URL);
+        return c;
     }
 
     private CandidateService createService() {

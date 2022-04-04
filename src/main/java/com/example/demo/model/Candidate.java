@@ -14,6 +14,8 @@ public class Candidate implements Serializable {
     @Column(nullable = false)
     private String name;
 
+    private String imgUrl;
+
     public Candidate(){
         super();
     }
@@ -36,6 +38,14 @@ public class Candidate implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     @Override
