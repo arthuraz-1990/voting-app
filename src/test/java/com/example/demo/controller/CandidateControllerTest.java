@@ -7,6 +7,7 @@ import com.example.demo.service.CandidateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Arrays;
 
@@ -39,6 +41,9 @@ public class CandidateControllerTest {
 
     @MockBean
     private CandidateService service;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("Teste de listagem")
@@ -124,5 +129,25 @@ public class CandidateControllerTest {
 
         this.mockMvc.perform(delete(PATH.concat("/" + id))).andDo(print()).
                 andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Erro no formato da URL da Imagem")
+    void test_ErrorImageUrlFormat() throws Exception {
+        CandidateDto dto = new CandidateDto();
+        dto.setImgUrl("abc");
+        dto.setName(NAME);
+
+        // Transformando o objeto para uma string json
+        ObjectWriter objectWriter = this.objectMapper.writer().withDefaultPrettyPrinter();
+        String jsonContent = objectWriter.writeValueAsString(dto);
+
+        this.mockMvc.perform(
+                        post(PATH).contentType(MediaType.APPLICATION_JSON).content(jsonContent)
+                ).andDo(print()).
+                andExpect(status().isBadRequest()).
+                andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
+
+
     }
 }
