@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -30,8 +31,8 @@ public class VoteServiceTest {
 
     private List<Vote> mockList;
 
-    private static final long ELECTION_ID_DEFAULT = 2001L;
-    private static final long CANDIDATE_ID_DEFAULT = 1001L;
+    private static final UUID ELECTION_ID_DEFAULT = UUID.randomUUID();
+    private static final UUID CANDIDATE_ID_DEFAULT = UUID.randomUUID();
     private static final String USER_ID_DEFAULT = "tester@test.com";
 
     @BeforeEach
@@ -43,16 +44,16 @@ public class VoteServiceTest {
 
         this.mockList.add(vote);
 
-        Mockito.when(this.voteRepository.findByElectionId(Mockito.anyLong())).thenAnswer(
+        Mockito.when(this.voteRepository.findByElectionId(Mockito.any())).thenAnswer(
                 invocationOnMock -> {
-                    Long electionId = invocationOnMock.getArgument(0);
+                    UUID electionId = invocationOnMock.getArgument(0);
                     return this.mockList.stream().filter(v -> v.getElectionId().equals(electionId)).collect(Collectors.toList());
                 }
         );
 
         // Mock dos resultados das verificações se os relacionamentos existem no banco.
-        Mockito.when(this.electionRepository.existsById(Mockito.anyLong())).thenAnswer(invocation -> invocation.getArgument(0).equals(ELECTION_ID_DEFAULT));
-        Mockito.when(this.candidateRepository.existsById(Mockito.anyLong())).thenAnswer(invocation -> invocation.getArgument(0).equals(CANDIDATE_ID_DEFAULT));
+        Mockito.when(this.electionRepository.existsById(Mockito.any())).thenAnswer(invocation -> invocation.getArgument(0).equals(ELECTION_ID_DEFAULT));
+        Mockito.when(this.candidateRepository.existsById(Mockito.any())).thenAnswer(invocation -> invocation.getArgument(0).equals(CANDIDATE_ID_DEFAULT));
     }
 
     private Vote createVote() {
@@ -99,7 +100,7 @@ public class VoteServiceTest {
     void test_errorNotFoundElection() {
         Vote vote = this.createVote();
         // Forçando um id diferente para ele não ser encontrado no mock
-        vote.setElectionId(ELECTION_ID_DEFAULT + 1);
+        vote.setElectionId(UUID.randomUUID());
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(vote));
     }
@@ -109,7 +110,7 @@ public class VoteServiceTest {
     void test_errorNotFoundCandidate() {
         Vote vote = this.createVote();
         // Forçando um id diferente para ele não ser encontrado no mock
-        vote.setCandidateId(CANDIDATE_ID_DEFAULT + 1);
+        vote.setCandidateId(UUID.randomUUID());
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(vote));
     }

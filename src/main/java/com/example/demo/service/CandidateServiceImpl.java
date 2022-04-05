@@ -5,6 +5,7 @@ import com.example.demo.repository.CandidateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -26,7 +27,7 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(UUID id) {
         if (this.repository.existsById(id)) {
             this.repository.deleteById(id);
         } else {

@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,7 +42,7 @@ public class ElectionCandidatesRegisterControllerTest {
     @Test
     @DisplayName("Buscar lista pelo identificador da Eleição")
     void test_FindListByElectionId() throws Exception {
-        long electionId = 2002L;
+        UUID electionId = UUID.randomUUID();
 
         ElectionCandidatesRegister register = new ElectionCandidatesRegister(electionId);
 
@@ -51,14 +52,14 @@ public class ElectionCandidatesRegisterControllerTest {
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andExpect(jsonPath("$").isNotEmpty()).
-                andExpect(jsonPath("$.electionId").value(electionId));
+                andExpect(jsonPath("$.electionId").value(electionId.toString()));
 
     }
 
     @Test
     @DisplayName("Erro quando eleição não é encontrada")
     void test_Error_NotFound() throws Exception {
-        long electionId = 2002L;
+        UUID electionId = UUID.randomUUID();
         Mockito.when(this.service.findByElectionId(electionId)).thenReturn(null);
         this.mockMvc.perform(get(ELECTION_PATH + "/" + electionId)).andDo(print()).
             andExpect(status().isNotFound());
@@ -74,7 +75,7 @@ public class ElectionCandidatesRegisterControllerTest {
     @Test
     @DisplayName("Adicionar novo candidato a uma eleição")
     void test_addNewCandidate() throws Exception {
-        long electionId = 2002L;
+        UUID electionId = UUID.randomUUID();
         String candidateName = "New Candidate";
 
         Candidate candidate = new Candidate(candidateName);
@@ -103,7 +104,7 @@ public class ElectionCandidatesRegisterControllerTest {
     @Test
     @DisplayName("Erro ao Adicionar novo candidato - Sem candidato")
     void test_ErrorNoCandidate() throws Exception {
-        long electionId = 2002L;
+        UUID electionId = UUID.randomUUID();
 
         this.mockMvc.perform(post(ELECTION_PATH + "/" + electionId)).
                 andDo(print()).
@@ -113,7 +114,7 @@ public class ElectionCandidatesRegisterControllerTest {
     @Test
     @DisplayName("Erro ao Adicionar novo candidato - candidato que já existe")
     void test_ErrorCandidateExists() throws Exception {
-        long electionId = 2002L;
+        UUID electionId = UUID.randomUUID();
 
         String candidateName = "Old Candidate";
 
@@ -131,8 +132,8 @@ public class ElectionCandidatesRegisterControllerTest {
     @Test
     @DisplayName("Remover candidato registrado em uma eleição")
     void test_RemoveCandidateExists() throws Exception {
-        long electionId = 2002L;
-        long candidateId = 1002L;
+        UUID electionId = UUID.randomUUID();
+        UUID candidateId = UUID.randomUUID();
 
         this.mockMvc.perform(delete(ELECTION_PATH + "/" + electionId + "/candidate/" + candidateId)).
                 andDo(print()).
@@ -144,8 +145,8 @@ public class ElectionCandidatesRegisterControllerTest {
     @Test
     @DisplayName("Erro Remover candidato NÃO registrado em uma eleição ou eleição não existente")
     void test_ErrorRemoveCandidateNotExists() throws Exception {
-        long electionId = 2002L;
-        long candidateId = 1002L;
+        UUID electionId = UUID.randomUUID();
+        UUID candidateId = UUID.randomUUID();
 
         Mockito.doThrow(new IllegalArgumentException()).when(this.service).delete(electionId, candidateId);
 

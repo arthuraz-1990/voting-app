@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,19 +45,19 @@ public class ElectionServiceTest {
     @Test
     @DisplayName("Teste para deletar por id")
     void test_Delete() {
-        long id = 10001L;
-        Mockito.when(this.repository.existsById(id)).thenReturn(Boolean.TRUE);
+        UUID electionId = UUID.randomUUID();
+        Mockito.when(this.repository.existsById(electionId)).thenReturn(Boolean.TRUE);
 
-        this.createService().delete(id);
+        this.createService().delete(electionId);
     }
 
     @Test
     @DisplayName("Teste de Erro ao deletar quando não for encontrado")
     void test_Delete_notFound() {
-        long id = 10001L;
-        Mockito.when(this.repository.existsById(id)).thenReturn(Boolean.FALSE);
+        UUID electionId = UUID.randomUUID();
+        Mockito.when(this.repository.existsById(electionId)).thenReturn(Boolean.FALSE);
 
-        assertThrows(IllegalArgumentException.class, () -> this.createService().delete(id));
+        assertThrows(IllegalArgumentException.class, () -> this.createService().delete(electionId));
     }
 
     private ElectionService createService() {

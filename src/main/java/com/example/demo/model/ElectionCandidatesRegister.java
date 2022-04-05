@@ -7,12 +7,13 @@ import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class ElectionCandidatesRegister implements Serializable {
 
     @Id
-    private Long electionId;
+    private UUID electionId;
 
     @ManyToMany(cascade = CascadeType.MERGE)
     private List<Candidate> candidateList;
@@ -20,15 +21,15 @@ public class ElectionCandidatesRegister implements Serializable {
     public ElectionCandidatesRegister() {
     }
 
-    public ElectionCandidatesRegister(Long electionId) {
+    public ElectionCandidatesRegister(UUID electionId) {
         this.electionId = electionId;
     }
 
-    public Long getElectionId() {
+    public UUID getElectionId() {
         return electionId;
     }
 
-    public void setElectionId(Long electionId) {
+    public void setElectionId(UUID electionId) {
         this.electionId = electionId;
     }
 

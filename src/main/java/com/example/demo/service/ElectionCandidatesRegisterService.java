@@ -3,11 +3,13 @@ package com.example.demo.service;
 import com.example.demo.model.Candidate;
 import com.example.demo.model.ElectionCandidatesRegister;
 
+import java.util.UUID;
+
 public interface ElectionCandidatesRegisterService {
 
-    ElectionCandidatesRegister findByElectionId(long electionId);
+    ElectionCandidatesRegister findByElectionId(UUID electionId);
 
-    ElectionCandidatesRegister save(long electionId, Candidate candidate);
+    ElectionCandidatesRegister save(UUID electionId, Candidate candidate);
 
-    void delete(long electionId, long candidateId);
+    void delete(UUID electionId, UUID candidateId);
 }

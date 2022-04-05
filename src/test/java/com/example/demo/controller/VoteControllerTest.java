@@ -21,6 +21,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @WebMvcTest(VoteController.class)
 public class VoteControllerTest {
@@ -37,8 +38,8 @@ public class VoteControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private static final long ELECTION_ID_DEFAULT = 2001L;
-    private static final long CANDIDATE_ID_DEFAULT = 1001L;
+    private static final UUID ELECTION_ID_DEFAULT = UUID.randomUUID();
+    private static final UUID CANDIDATE_ID_DEFAULT = UUID.randomUUID();
     private static final String USER_ID_DEFAULT = "tester@test.com";
 
     @Test
@@ -53,7 +54,7 @@ public class VoteControllerTest {
                 andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).
                 andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty()).
                 andExpect(MockMvcResultMatchers.jsonPath("$").isArray()).
-                andExpect(MockMvcResultMatchers.jsonPath("$[0].electionId").value(ELECTION_ID_DEFAULT));
+                andExpect(MockMvcResultMatchers.jsonPath("$[0].electionId").value(ELECTION_ID_DEFAULT.toString()));
 
     }
 
@@ -80,8 +81,8 @@ public class VoteControllerTest {
                 andExpect(MockMvcResultMatchers.status().isOk()).
                 andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).
                 andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty()).
-                andExpect(MockMvcResultMatchers.jsonPath("$.candidateId").value(vote.getCandidateId())).
-                andExpect(MockMvcResultMatchers.jsonPath("$.electionId").value(vote.getElectionId())).
+                andExpect(MockMvcResultMatchers.jsonPath("$.candidateId").value(vote.getCandidateId().toString())).
+                andExpect(MockMvcResultMatchers.jsonPath("$.electionId").value(vote.getElectionId().toString())).
                 andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(vote.getUserId()));
     }
 

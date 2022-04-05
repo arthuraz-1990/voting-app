@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -110,7 +111,7 @@ public class ElectionControllerTest {
     @Test
     @DisplayName("Teste para deletar a partir de um id")
     void test_Delete() throws Exception {
-        long id = 100001L;
+        UUID id = UUID.randomUUID();
 
         this.mockMvc.perform(delete(PATH.concat("/" + id))).andDo(print()).
                 andExpect(status().isOk());
@@ -119,7 +120,7 @@ public class ElectionControllerTest {
     @Test
     @DisplayName("Teste quando um id para deletar não é encontrado")
     void test_Delete_NotFound() throws Exception {
-        long id = 100001L;
+        UUID id = UUID.randomUUID();
 
         Mockito.doThrow(new IllegalArgumentException()).when(this.service).delete(id);
 
@@ -131,7 +132,7 @@ public class ElectionControllerTest {
     @DisplayName("Teste com data com formato válido")
     void test_WithValidDate() throws Exception {
         String dateValue = "\"2022-03-29 00:00:00\"";
-        String jsonContent = "{ \"id\": 1, \"name\": \"Teste\", \"startDate\": " + dateValue + ", \"endDate\": null }";
+        String jsonContent = "{ \"id\": \"" + UUID.randomUUID() + "\", \"name\": \"Teste\", \"startDate\": " + dateValue + ", \"endDate\": null }";
 
         Mockito.when(this.service.save(ArgumentMatchers.any())).thenReturn(new Election());
 
@@ -145,7 +146,7 @@ public class ElectionControllerTest {
     @DisplayName("Teste com data com formato inválido")
     void test_setInvalidDateError() throws Exception {
         String invalidDateValue = "\"abc\"";
-        String jsonContent = "{ \"id\": 1, \"name\": \"Teste\", \"startDate\": " + invalidDateValue + ", \"endDate\": null }";
+        String jsonContent = "{ \"id\": \"" + UUID.randomUUID() + "\", \"name\": \"Teste\", \"startDate\": " + invalidDateValue + ", \"endDate\": null }";
 
         this.mockMvc.perform(
                         post(PATH).contentType(MediaType.APPLICATION_JSON).content(jsonContent)
@@ -163,7 +164,7 @@ public class ElectionControllerTest {
     @Test
     @DisplayName("Teste de erro com a data inicio antes da data fim")
     void test_StartDateBeforeEndDateError() throws Exception {
-        String jsonContent = "{ \"id\": 1, \"name\": \"Teste\", \"startDate\": \"2022-03-28 00:00:00\", \"endDate\": \"2021-03-28 00:00:00\" }";
+        String jsonContent = "{ \"id\": \"" + UUID.randomUUID() + "\", \"name\": \"Teste\", \"startDate\": \"2022-03-28 00:00:00\", \"endDate\": \"2021-03-28 00:00:00\" }";
 
         Mockito.when(this.service.save(ArgumentMatchers.any())).thenReturn(new Election());
 

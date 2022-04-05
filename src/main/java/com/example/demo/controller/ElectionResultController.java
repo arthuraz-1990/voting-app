@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.webjars.NotFoundException;
 
+import java.util.UUID;
+
 @Tag(description = "Controller com os serviços de Resultados", name = "Controller de Resultados")
 @RestController
 @RequestMapping("/result/election")
@@ -31,7 +33,7 @@ public class ElectionResultController {
             @ApiResponse(responseCode = "200", description = "Listagem de votos por eleição")
     })
     public ElectionResultDto getResultById(
-        @PathVariable @Parameter(description ="Identificador da Eleição") Long electionId) {
+        @PathVariable @Parameter(description ="Identificador da Eleição") UUID electionId) {
         try {
             return this.service.findById(electionId);
         } catch (IllegalArgumentException ex) {

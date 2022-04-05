@@ -3,5 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.model.ElectionCandidatesRegister;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ElectionCandidatesRegisterRepository extends JpaRepository<ElectionCandidatesRegister, Long> {
+import java.util.UUID;
+
+public interface ElectionCandidatesRegisterRepository extends JpaRepository<ElectionCandidatesRegister, UUID> {
 }

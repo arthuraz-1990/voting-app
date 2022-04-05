@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Tag(description = "Controller com os serviços de Votos", name = "Controller de Votos")
@@ -37,7 +38,7 @@ public class VoteController {
             @ApiResponse(responseCode = "200", description = "Listagem de votos por eleição")
     })
     public List<VoteDTO> findByElectionId(
-            @PathVariable @Parameter(description ="Identificador da Eleição") Long electionId) {
+            @PathVariable @Parameter(description ="Identificador da Eleição") UUID electionId) {
         return this.service.findByElectionId(electionId).stream().map(v -> this.modelMapper.map(v, VoteDTO.class)).
                 collect(Collectors.toList());
     }

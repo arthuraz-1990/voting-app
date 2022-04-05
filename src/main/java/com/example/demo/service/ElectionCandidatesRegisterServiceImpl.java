@@ -7,6 +7,7 @@ import com.example.demo.repository.ElectionCandidatesRegisterRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ElectionCandidatesRegisterServiceImpl implements ElectionCandidatesRegisterService {
@@ -21,12 +22,12 @@ public class ElectionCandidatesRegisterServiceImpl implements ElectionCandidates
     }
 
     @Override
-    public ElectionCandidatesRegister findByElectionId(long electionId) {
+    public ElectionCandidatesRegister findByElectionId(UUID electionId) {
         return this.registerRepository.findById(electionId).orElse(null);
     }
 
     @Override
-    public ElectionCandidatesRegister save(long electionId, Candidate candidate) {
+    public ElectionCandidatesRegister save(UUID electionId, Candidate candidate) {
         if (candidate == null) {
             throw new IllegalArgumentException("Candidato não enviado.");
         }
@@ -45,7 +46,7 @@ public class ElectionCandidatesRegisterServiceImpl implements ElectionCandidates
     }
 
     @Override
-    public void delete(long electionId, long candidateId) {
+    public void delete(UUID electionId, UUID candidateId) {
         ElectionCandidatesRegister election = this.registerRepository.findById(electionId).
                 orElseThrow(() -> new IllegalArgumentException("Eleição não encontrada"));
         //

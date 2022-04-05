@@ -4,11 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ElectionResultDto {
 
     @Schema(description = "Identificador da Eleição")
-    private long electionId;
+    private UUID electionId;
 
     @Schema(description = "Listagem com os resultados por candidato")
     private List<CandidateResultDto> candidateResultList;
@@ -17,11 +18,11 @@ public class ElectionResultDto {
         this.candidateResultList = new ArrayList<>();
     }
 
-    public long getElectionId() {
+    public UUID getElectionId() {
         return electionId;
     }
 
-    public void setElectionId(long electionId) {
+    public void setElectionId(UUID electionId) {
         this.electionId = electionId;
     }
 

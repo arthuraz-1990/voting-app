@@ -8,11 +8,12 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ElectionDto {
 
     @Schema(description = "Identificador da Eleição")
-    private Long id;
+    private UUID id;
 
     @Schema(description = "Nome da Eleição")
     @NotEmpty
@@ -27,11 +28,11 @@ public class ElectionDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

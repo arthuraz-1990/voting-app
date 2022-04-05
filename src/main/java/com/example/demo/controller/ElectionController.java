@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Tag(description = "Controller com os serviços de Eleições", name = "Controller de Eleições")
@@ -59,7 +60,7 @@ public class ElectionController {
             @ApiResponse(responseCode = "404", description = "Eleição não encontrada"),
     })
     ResponseEntity<String> delete(
-            @PathVariable @Parameter(description ="Identificador da Eleição") Long id) {
+            @PathVariable @Parameter(description ="Identificador da Eleição") UUID id) {
         try {
             this.service.delete(id);
             return ResponseEntity.ok("SUCCESS");

@@ -29,9 +29,9 @@ public class ElectionResultServiceTest {
 
     private List<Vote> mockVotes;
 
-    private static final long ELECTION_ID = 2001L;
+    private static final UUID ELECTION_ID = UUID.randomUUID();
 
-    private static final long CANDIDATE_ID = 1001L;
+    private static final UUID CANDIDATE_ID = UUID.randomUUID();
 
     @BeforeEach
     void setup() {
@@ -39,14 +39,14 @@ public class ElectionResultServiceTest {
         this.service = new ElectionResultServiceImpl(this.voteRepository, this.electionRepository);
 
         Mockito.when(this.voteRepository.findByElectionId(ELECTION_ID)).thenReturn(this.mockVotes);
-        Mockito.when(this.electionRepository.existsById(Mockito.anyLong())).thenAnswer(call -> call.getArgument(0).equals(ELECTION_ID));
+        Mockito.when(this.electionRepository.existsById(Mockito.any())).thenAnswer(call -> call.getArgument(0).equals(ELECTION_ID));
     }
 
     private void mockVotes(long totalVotes, long modParameter) {
         for (int i = 1; i <= totalVotes; i++) {
             Vote vote = new Vote();
             vote.setElectionId(ELECTION_ID);
-            long candidateId = i % modParameter > 0 ? i : CANDIDATE_ID;
+            UUID candidateId = i % modParameter > 0 ? UUID.randomUUID() : CANDIDATE_ID;
             vote.setCandidateId(candidateId);
             vote.setVoteTime(LocalDateTime.now());
             vote.setUserId(UUID.randomUUID().toString());
@@ -72,7 +72,7 @@ public class ElectionResultServiceTest {
     @Test
     @DisplayName("Erro Eleição não existe")
     void test_ElectionNotFound() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.findById(ELECTION_ID + 1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.findById(UUID.randomUUID()));
     }
 
     @Test

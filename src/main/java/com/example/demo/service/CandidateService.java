@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Candidate;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CandidateService {
 
@@ -10,5 +11,5 @@ public interface CandidateService {
 
     Candidate save(Candidate candidate);
 
-    void delete(long id);
+    void delete(UUID id);
 }

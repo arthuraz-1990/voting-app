@@ -6,17 +6,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Vote implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     @Column(nullable = false)
-    private Long electionId;
+    private UUID electionId;
     @Column(nullable = false)
-    private Long candidateId;
+    private UUID candidateId;
     @Column(nullable = false)
     private String userId;
     @Version
@@ -33,27 +34,27 @@ public class Vote implements Serializable {
 
     // TODO: 31/03/2022 Adicionar relacionamento com tabela de usuários
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Long getElectionId() {
+    public UUID getElectionId() {
         return electionId;
     }
 
-    public void setElectionId(Long electionId) {
+    public void setElectionId(UUID electionId) {
         this.electionId = electionId;
     }
 
-    public Long getCandidateId() {
+    public UUID getCandidateId() {
         return candidateId;
     }
 
-    public void setCandidateId(Long candidateId) {
+    public void setCandidateId(UUID candidateId) {
         this.candidateId = candidateId;
     }
 

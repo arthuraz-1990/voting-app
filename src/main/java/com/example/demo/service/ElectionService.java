@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Election;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ElectionService {
 
@@ -10,5 +11,5 @@ public interface ElectionService {
 
     Election save(Election election);
 
-    void delete(long id);
+    void delete(UUID id);
 }

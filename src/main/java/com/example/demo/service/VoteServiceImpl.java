@@ -7,6 +7,7 @@ import com.example.demo.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class VoteServiceImpl implements VoteService {
@@ -25,7 +26,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public List<Vote> findByElectionId(long electionId) {
+    public List<Vote> findByElectionId(UUID electionId) {
         return this.voteRepository.findByElectionId(electionId);
     }
 

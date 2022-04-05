@@ -5,11 +5,12 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 public class CandidateDto {
 
     @Schema(description = "Identificador do Candidato")
-    private Long id;
+    private UUID id;
 
     @Schema(description = "Nome do Candidato")
     @NotEmpty
@@ -21,11 +22,11 @@ public class CandidateDto {
     private String imgUrl;
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

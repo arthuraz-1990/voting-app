@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -113,7 +114,7 @@ public class CandidateControllerTest {
     @Test
     @DisplayName("Teste para deletar a partir de um id")
     void test_Delete() throws Exception {
-        long id = 100001L;
+        UUID id = UUID.randomUUID();
 
         this.mockMvc.perform(delete(PATH.concat("/" + id))).andDo(print()).
                 andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN)).
@@ -123,7 +124,7 @@ public class CandidateControllerTest {
     @Test
     @DisplayName("Teste quando um id para deletar não é encontrado")
     void test_Delete_NotFound() throws Exception {
-        long id = 100001L;
+        UUID id = UUID.randomUUID();
 
         Mockito.doThrow(new IllegalArgumentException()).when(this.service).delete(id);
 

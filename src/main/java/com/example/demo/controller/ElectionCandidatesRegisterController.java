@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Tag(description = "Controller com os serviços de registros de Candidatos em Eleições", name = "Controller de Registro de Candidatos")
 @RestController
@@ -34,7 +35,7 @@ public class ElectionCandidatesRegisterController {
     @GetMapping(value = "election/{electionId}")
     @Operation(summary = "Listar registros de Candidatos por eleição")
     ElectionCandidatesRegisterDto findByElectionId(
-            @PathVariable @Parameter(description = "Identificador da Eleição") Long electionId) {
+            @PathVariable @Parameter(description = "Identificador da Eleição") UUID electionId) {
         ElectionCandidatesRegister register = this.service.findByElectionId(electionId);
         if (register != null) {
             return this.mapper.map(register, ElectionCandidatesRegisterDto.class);
@@ -49,7 +50,7 @@ public class ElectionCandidatesRegisterController {
             @ApiResponse(responseCode = "400", description = "Erro ao registrar candidato")
     })
     ElectionCandidatesRegisterDto registerCandidate(
-            @PathVariable @Parameter(description = "Identificador da Eleição") Long electionId,
+            @PathVariable @Parameter(description = "Identificador da Eleição") UUID electionId,
             @Valid @RequestBody @Parameter(description = "Descrição do Candidato") CandidateDto candidateDto) {
         Candidate candidate = new ModelMapper().map(candidateDto, Candidate.class);
         try {
@@ -67,8 +68,8 @@ public class ElectionCandidatesRegisterController {
             @ApiResponse(responseCode = "404", description = "Candidato não registrado ou não encontrado"),
     })
     ResponseEntity<String> removeCandidateFromElection(
-            @PathVariable @Parameter(description = "Identificador da Eleição") Long electionId,
-            @PathVariable @Parameter(description = "Identificador do Candidato") Long candidateId) {
+            @PathVariable @Parameter(description = "Identificador da Eleição") UUID electionId,
+            @PathVariable @Parameter(description = "Identificador do Candidato") UUID candidateId) {
         try {
             this.service.delete(electionId, candidateId);
         } catch (IllegalArgumentException e) {

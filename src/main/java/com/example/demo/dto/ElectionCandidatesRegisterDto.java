@@ -4,20 +4,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ElectionCandidatesRegisterDto {
 
     @Schema(description = "Identificador da Eleição")
-    private Long electionId;
+    private UUID electionId;
 
     @Schema(description = "Listagem de Candidatos registrados")
     private List<CandidateDto> candidateList;
 
-    public Long getElectionId() {
+    public UUID getElectionId() {
         return electionId;
     }
 
-    public void setElectionId(Long electionId) {
+    public void setElectionId(UUID electionId) {
         this.electionId = electionId;
     }
 

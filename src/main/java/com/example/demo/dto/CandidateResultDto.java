@@ -2,10 +2,12 @@ package com.example.demo.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.UUID;
+
 public class CandidateResultDto {
 
     @Schema(description = "Identificador do Candidato")
-    private long candidateId;
+    private UUID candidateId;
     @Schema(description = "Total de Votos do Candidato")
     private long totalVotes;
     @Schema(description = "Porcentagem de Votos do Candidato")
@@ -28,11 +30,11 @@ public class CandidateResultDto {
         this.votePercentage = votePercentage;
     }
 
-    public long getCandidateId() {
+    public UUID getCandidateId() {
         return this.candidateId;
     }
 
-    public void setCandidateId(long candidateId) {
+    public void setCandidateId(UUID candidateId) {
         this.candidateId = candidateId;
     }
 }

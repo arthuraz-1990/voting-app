@@ -7,15 +7,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class VoteDTO {
 
     @Schema(description = "Identificador da Eleição")
     @NotNull
-    private Long electionId;
+    private UUID electionId;
     @Schema(description = "Identificador do Candidato")
     @NotNull
-    private Long candidateId;
+    private UUID candidateId;
     @Schema(description = "Identificador do Usuário (email)")
     @NotBlank
     @Email
@@ -24,19 +25,19 @@ public class VoteDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime voteTime;
 
-    public Long getElectionId() {
+    public UUID getElectionId() {
         return electionId;
     }
 
-    public void setElectionId(Long electionId) {
+    public void setElectionId(UUID electionId) {
         this.electionId = electionId;
     }
 
-    public Long getCandidateId() {
+    public UUID getCandidateId() {
         return candidateId;
     }
 
-    public void setCandidateId(Long candidateId) {
+    public void setCandidateId(UUID candidateId) {
         this.candidateId = candidateId;
     }
 

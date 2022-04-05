@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootTest
 public class ElectionCandidatesRegisterServiceTest {
@@ -29,8 +30,8 @@ public class ElectionCandidatesRegisterServiceTest {
 
     private ElectionCandidatesRegister mockRegister;
 
-    private static final long ELECTION_ID_DEFAULT = 2001L;
-    private static final long CANDIDATE_ID_DEFAULT = 1001L;
+    private static final UUID ELECTION_ID_DEFAULT = UUID.randomUUID();
+    private static final UUID CANDIDATE_ID_DEFAULT = UUID.randomUUID();
 
     @BeforeEach
     void setup() {
@@ -65,8 +66,10 @@ public class ElectionCandidatesRegisterServiceTest {
     @DisplayName("Teste para busca de registros pelo identificador da Eleição")
     void test_NotFoundFindByElectionId() {
 
-        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT + 1)).thenReturn(Optional.empty());
-        ElectionCandidatesRegister register = this.service.findByElectionId(ELECTION_ID_DEFAULT + 1);
+        UUID electionId = UUID.randomUUID();
+
+        Mockito.when(this.registerRepository.findById(electionId)).thenReturn(Optional.empty());
+        ElectionCandidatesRegister register = this.service.findByElectionId(electionId);
 
         Assertions.assertNull(register);
 
@@ -103,10 +106,11 @@ public class ElectionCandidatesRegisterServiceTest {
     @Test
     @DisplayName("Erro ao adicionar à eleição com id não encontrado")
     void test_Error_ElectionNotFoundAddNewCandidate() {
-        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT + 1)).thenReturn(Optional.empty());
+        UUID electionId = UUID.randomUUID();
+        Mockito.when(this.registerRepository.findById(electionId)).thenReturn(Optional.empty());
         Mockito.when(this.registerRepository.save(this.mockRegister)).thenReturn(this.mockRegister);
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(ELECTION_ID_DEFAULT, createNewCandidate()));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.save(electionId, createNewCandidate()));
     }
 
     @Test
@@ -130,19 +134,20 @@ public class ElectionCandidatesRegisterServiceTest {
     @DisplayName("Erro ao remover candidato não registrado na eleição")
     void test_ErrorRemoveCandidateNotRegistered() {
         Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT)).thenReturn(Optional.of(this.mockRegister));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.delete(ELECTION_ID_DEFAULT, CANDIDATE_ID_DEFAULT + 1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.delete(ELECTION_ID_DEFAULT, UUID.randomUUID()));
     }
 
     @Test
     @DisplayName("Erro ao remover candidato de uma eleição não encontrada")
     void test_ErrorRemoveCandidateElectionNotFound() {
-        Mockito.when(this.registerRepository.findById(ELECTION_ID_DEFAULT + 1)).thenReturn(Optional.empty());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.delete(ELECTION_ID_DEFAULT + 1, CANDIDATE_ID_DEFAULT));
+        UUID electionId = UUID.randomUUID();
+        Mockito.when(this.registerRepository.findById(electionId)).thenReturn(Optional.empty());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> this.service.delete(electionId, CANDIDATE_ID_DEFAULT));
     }
 
     private Candidate createNewCandidate() {
         Candidate newCandidate = new Candidate();
-        newCandidate.setId(CANDIDATE_ID_DEFAULT + 1);
+        newCandidate.setId(UUID.randomUUID());
         newCandidate.setName("New Candidate");
         return newCandidate;
     }

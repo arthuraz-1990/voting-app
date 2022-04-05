@@ -8,6 +8,7 @@ import com.example.demo.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +23,7 @@ public class ElectionResultServiceImpl implements ElectionResultService {
     }
 
     @Override
-    public ElectionResultDto findById(long electionId) {
+    public ElectionResultDto findById(UUID electionId) {
         if (!this.electionRepository.existsById(electionId)) {
             throw new IllegalArgumentException("Eleição não encontrada.");
         }
@@ -34,7 +35,7 @@ public class ElectionResultServiceImpl implements ElectionResultService {
 
         if (!voteList.isEmpty()) {
             // Lista dos Ids de candidatos...
-            List<Long> candidatesIds = voteList.stream().map(Vote::getCandidateId).distinct().collect(Collectors.toList());
+            List<UUID> candidatesIds = voteList.stream().map(Vote::getCandidateId).distinct().collect(Collectors.toList());
 
             // Transformando os candidatos no seu resumo de resultado
             List<CandidateResultDto> candidateResultList = candidatesIds.stream().map(candidateId ->
@@ -47,7 +48,7 @@ public class ElectionResultServiceImpl implements ElectionResultService {
         return electionResultDto;
     }
 
-    private CandidateResultDto buildCandidateResult(List<Vote> voteList, Long candidateId) {
+    private CandidateResultDto buildCandidateResult(List<Vote> voteList, UUID candidateId) {
         int totalVotes = voteList.size();
 
         CandidateResultDto candidateResultDto = new CandidateResultDto();
