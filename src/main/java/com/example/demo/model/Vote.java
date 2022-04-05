@@ -1,7 +1,5 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
-import com.example.demo.model.Candidate;
-import com.example.demo.model.Election;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -10,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table
 public class Vote implements Serializable {
 
     @Id

@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Vote;
+import com.example.demo.model.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

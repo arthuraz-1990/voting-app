@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Vote;
+import com.example.demo.model.Vote;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.VoteDTO;
-import com.example.demo.entity.Vote;
+import com.example.demo.model.Vote;
 import com.example.demo.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

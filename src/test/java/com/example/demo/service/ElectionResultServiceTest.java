@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.CandidateResultDto;
 import com.example.demo.dto.ElectionResultDto;
-import com.example.demo.entity.Vote;
+import com.example.demo.model.Vote;
 import com.example.demo.repository.ElectionRepository;
 import com.example.demo.repository.VoteRepository;
 import org.junit.jupiter.api.*;

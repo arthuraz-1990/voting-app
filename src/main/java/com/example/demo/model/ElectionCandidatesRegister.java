@@ -1,12 +1,14 @@
 package com.example.demo.model;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table
 public class ElectionCandidatesRegister implements Serializable {
 
     @Id

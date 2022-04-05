@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table
 public class Election implements Serializable {
 
     @Id

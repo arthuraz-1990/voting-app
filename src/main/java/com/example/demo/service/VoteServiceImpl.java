@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Vote;
+import com.example.demo.model.Vote;
 import com.example.demo.repository.CandidateRepository;
 import com.example.demo.repository.ElectionRepository;
 import com.example.demo.repository.VoteRepository;
