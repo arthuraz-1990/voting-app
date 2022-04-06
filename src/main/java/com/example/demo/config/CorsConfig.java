@@ -10,7 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfig implements WebMvcConfigurer {
 
     private static final String[] ALLOWED_ORIGINS = {
-        "https://voting-angular-ui.herokuapp.com/" // Aplicação Angular no Heroku
+        "https://voting-angular-ui.herokuapp.com", // Aplicação Angular no Heroku
+        "http://localhost:4200"
     };
 
     @Override
