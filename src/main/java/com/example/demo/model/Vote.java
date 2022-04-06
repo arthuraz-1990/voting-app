@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Vote implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Column(nullable = false)
     private UUID electionId;
