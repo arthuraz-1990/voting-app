@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Candidate;
 import com.example.demo.model.Election;
 import com.example.demo.repository.ElectionRepository;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,11 @@ public class ElectionServiceImpl implements ElectionService {
         } else {
             throw new IllegalArgumentException("Objeto não encontrado");
         }
+    }
+
+    @Override
+    public Election findById(UUID id) {
+        return this.repository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Eleição não encontrada."));
     }
 }

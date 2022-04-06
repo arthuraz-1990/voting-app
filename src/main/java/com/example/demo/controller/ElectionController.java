@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ElectionDto;
+import com.example.demo.model.Candidate;
 import com.example.demo.model.Election;
 import com.example.demo.service.ElectionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +40,23 @@ public class ElectionController {
     })
     public List<ElectionDto> findAll() {
         return this.service.findAll().stream().map(e -> this.modelMapper.map(e, ElectionDto.class)).collect(Collectors.toList());
+    }
+
+    @GetMapping("{electionId}")
+    @Operation(summary = "Retorna eleição a partir do seu Identificador")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna a eleição"),
+            @ApiResponse(responseCode = "404", description = "Eleição não encontrada")
+    })
+    @ResponseBody
+    ResponseEntity<ElectionDto> findById(@PathVariable @Parameter(description = "Identificador da eleição") UUID electionId) {
+        try {
+            Election election = this.service.findById(electionId);
+            ElectionDto dto = this.modelMapper.map(election, ElectionDto.class);
+            return  ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

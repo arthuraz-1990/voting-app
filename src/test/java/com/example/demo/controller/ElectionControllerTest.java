@@ -55,6 +55,22 @@ public class ElectionControllerTest {
     }
 
     @Test
+    @DisplayName("Teste de busca por Id")
+    void test_FindById() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        Election election = new Election();
+
+        election.setId(uuid);
+        Mockito.when(this.service.findById(uuid)).thenReturn(election);
+
+        this.mockMvc.perform(get(PATH.concat("/").concat(uuid.toString()))).andDo(print()).
+                andExpect(status().isOk()).
+                andExpect(content().contentType(MediaType.APPLICATION_JSON)).
+                andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty()).
+                andExpect(MockMvcResultMatchers.jsonPath("$.id").value(uuid.toString()));
+    }
+
+    @Test
     @DisplayName("Teste para persistir candidato")
     void test_SaveElection() throws Exception {
         Election election = new Election(NAME);

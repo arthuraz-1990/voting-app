@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.model.Candidate;
+import com.example.demo.model.Election;
 import com.example.demo.service.CandidateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -56,6 +57,22 @@ public class CandidateControllerTest {
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON)).
                 andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("Teste de busca por Id")
+    void test_FindById() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        Candidate candidate = new Candidate();
+
+        candidate.setId(uuid);
+        Mockito.when(this.service.findById(uuid)).thenReturn(candidate);
+
+        this.mockMvc.perform(get(PATH.concat("/").concat(uuid.toString()))).andDo(print()).
+                andExpect(status().isOk()).
+                andExpect(content().contentType(MediaType.APPLICATION_JSON)).
+                andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty()).
+                andExpect(MockMvcResultMatchers.jsonPath("$.id").value(uuid.toString()));
     }
 
     @Test

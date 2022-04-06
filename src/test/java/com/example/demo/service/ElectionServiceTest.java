@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Candidate;
 import com.example.demo.model.Election;
 import com.example.demo.repository.ElectionRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +23,8 @@ public class ElectionServiceTest {
     @Mock
     private ElectionRepository repository;
 
+    private static final UUID DEFAULT_ID = UUID.randomUUID();
+
     @Test
     @DisplayName("Teste de listagem")
     void test_FindAll() {
@@ -30,6 +34,27 @@ public class ElectionServiceTest {
 
         assertThat(electionList.isEmpty()).isFalse();
         assertEquals(electionList.size(), 2);
+    }
+
+    @Test
+    @DisplayName("Busca pelo Identificador")
+    void test_FindById() {
+        Election election = new Election();
+        election.setId(DEFAULT_ID);
+        Mockito.when(this.repository.findById(DEFAULT_ID)).thenReturn(Optional.of(election));
+
+        Election electionById = this.createService().findById(DEFAULT_ID);
+        assertNotNull(electionById);
+        assertEquals(electionById.getId(), DEFAULT_ID);
+    }
+
+    @Test
+    @DisplayName("Erro Identificador não encontrado")
+    void test_ErrorFindById() {
+        UUID id = UUID.randomUUID();
+        Mockito.when(this.repository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> this.createService().findById(id));
     }
 
     @Test

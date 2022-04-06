@@ -12,4 +12,6 @@ public interface CandidateService {
     Candidate save(Candidate candidate);
 
     void delete(UUID id);
+
+    Candidate findById(UUID uuid);
 }

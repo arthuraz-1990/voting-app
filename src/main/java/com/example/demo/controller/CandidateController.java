@@ -43,6 +43,23 @@ public class CandidateController {
         return this.service.findAll().stream().map(c -> this.modelMapper.map(c, CandidateDto.class)).collect(Collectors.toList());
     }
 
+    @GetMapping("{candidateId}")
+    @Operation(summary = "Retorna candidato a partir do seu Identificador")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna o candidato"),
+            @ApiResponse(responseCode = "404", description = "Candidato não encontrado")
+    })
+    @ResponseBody
+    ResponseEntity<CandidateDto> findById(@PathVariable @Parameter(description = "Identificador do candidato") UUID candidateId) {
+        try {
+            Candidate candidate = this.service.findById(candidateId);
+            CandidateDto dto = this.modelMapper.map(candidate, CandidateDto.class);
+            return  ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Salva um novo candidato")
     @ResponseBody

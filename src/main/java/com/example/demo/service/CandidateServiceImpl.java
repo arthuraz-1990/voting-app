@@ -34,4 +34,10 @@ public class CandidateServiceImpl implements CandidateService {
             throw new IllegalArgumentException("Entity not found");
         }
     }
+
+    @Override
+    public Candidate findById(UUID id) {
+        return this.repository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Candidato não encontrado."));
+    }
 }

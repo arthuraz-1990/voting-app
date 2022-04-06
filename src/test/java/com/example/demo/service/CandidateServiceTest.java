@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +26,8 @@ public class CandidateServiceTest {
     private static final String NAME = "New Candidate";
     private static final String IMG_URL = "http://teste.com/img.png";
 
+    private static final UUID DEFAULT_ID = UUID.randomUUID();
+
     @Test
     @DisplayName("Teste de listagem de candidatos")
     void test_FindAll() {
@@ -34,6 +37,28 @@ public class CandidateServiceTest {
 
         assertThat(candidateList.isEmpty()).isFalse();
         assertEquals(candidateList.size(), 2);
+    }
+
+    @Test
+    @DisplayName("Busca pelo Identificador")
+    void test_FindById() {
+        Candidate createdCandidate = this.createCandidate();
+        createdCandidate.setId(DEFAULT_ID);
+        Mockito.when(this.repository.findById(DEFAULT_ID)).thenReturn(Optional.of(createdCandidate));
+
+        Candidate candidate = this.createService().findById(DEFAULT_ID);
+        assertNotNull(candidate);
+        assertEquals(candidate.getId(), DEFAULT_ID);
+        assertEquals(candidate.getName(), NAME);
+    }
+
+    @Test
+    @DisplayName("Erro Identificador não encontrado")
+    void test_ErrorFindById() {
+        UUID id = UUID.randomUUID();
+        Mockito.when(this.repository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> this.createService().findById(id));
     }
 
     @Test

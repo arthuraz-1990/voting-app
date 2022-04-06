@@ -12,4 +12,6 @@ public interface ElectionService {
     Election save(Election election);
 
     void delete(UUID id);
+
+    Election findById(UUID randomUUID);
 }
